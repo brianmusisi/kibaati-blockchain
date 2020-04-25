@@ -1,0 +1,23 @@
+COMPOSER_CARD=admin@mabreezi
+COMPOSER_NAMESPACES=never
+COMPOSER_AUTHENTICATION=true
+COMPOSER_MULTIUSER=true
+COMPOSER_PROVIDERS='{
+    "github": {
+        "provider": "github",
+        "module": "passport-github",
+        "clientID":"ec83bb7539a945c972fd",
+        "clientSecret": "58675ad2ad0f0a564bae566124023d155e4a2714",
+        "authPath": "/auth/github",
+        "callbackURL": "/auth/github/callback",
+        "successRedirect":"http://hyper.brianmusisi.com/app/dashboard",
+        "failureRedirect": "/"
+    }
+}'
+COMPOSER_DATASOURCES='{
+    "db": {
+        "name": "db",
+        "connector": "mongodb",
+        "host": "mongo"
+    }
+}'

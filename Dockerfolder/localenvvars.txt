@@ -1,0 +1,23 @@
+COMPOSER_CARD=admin@mabreezi
+COMPOSER_NAMESPACES=never
+COMPOSER_AUTHENTICATION=true
+COMPOSER_MULTIUSER=true
+COMPOSER_PROVIDERS='{
+    "github": {
+        "provider": "github",
+        "module": "passport-github",
+        "clientID": "7573f3e81ee1898db4f5",
+        "clientSecret": "1f985dba9636dae4891624080d2dc32b10fb4fc5",
+        "authPath": "/auth/github",
+        "callbackURL": "/auth/github/callback",
+        "successRedirect":"http://52.226.129.193/sender/session-create/",
+        "failureRedirect": "/"
+    }
+}'
+COMPOSER_DATASOURCES='{
+    "db": {
+        "name": "db",
+        "connector": "mongodb",
+        "host": "mongo"
+    }
+}'

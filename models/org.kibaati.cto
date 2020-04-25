@@ -1,0 +1,167 @@
+
+/**
+ * My commodity trading network
+ */
+namespace org.kibaati
+
+
+/************* Assets **************/
+
+/* A single Item */
+asset Item identified by itemId {
+    o String itemName 
+    o String itemId
+    o String description
+    o Double quantity
+    --> Person owner optional
+    --> Organization organization optional
+    --> Shipment shipment optional
+}
+
+/** A shipment that contain
+multiple items of different types */
+asset Shipment identified by shipmentId{
+    o String shipmentId
+    o String [] itemList
+    o String location
+    o String [] locationReadings
+    o String destination
+    --> Organization organization optional
+
+}
+
+
+/************* Participants ***********/
+
+
+/** The parent class that defines a particpant or
+person on the blockchain */
+abstract participant Person identified by personId {
+    o String personId
+    o String firstName
+    o String lastName
+    o Double balance optional
+}
+
+/*** Defintion of a refugee ***/
+participant Refugee extends Person {
+  o String refugeeId
+  o Integer phoneNumber optional
+  o Integer age
+  o Integer zone
+  o Integer village
+  o String alternate optional
+  --> Family family optional 
+}
+
+/*** Definition of a Merchant ***/
+participant Merchant extends Person{
+  o String merchantId
+  o Integer zone
+  o String email optional
+  o Integer phoneNumber
+  o Integer accountNumber
+  // o String personId
+  // o String firstName
+  // o String lastName
+  // o Double balance optional
+}
+
+/*** A user from the implemeting partner ****/
+participant PartnerUser extends Person {
+  o String email
+  o Integer phoneNumber
+  --> Organization organization optional
+}
+
+
+participant Trucker extends Person{
+  o String truckId optional
+  o Integer phoneNumber
+}
+
+
+/********** Collections of participants ***********/
+participant Organization identified by organizationId {
+  o String organizationId
+  o String name
+  o String physicalAddress
+  o String contactPerson
+  o Integer balance
+  o Integer contact 
+}
+
+participant Family identified by familyId {
+  o String familyId
+  o String [] members
+  o String location
+  o Integer contact
+  o Integer balance
+}
+
+
+/************* Transactions ***************/
+
+
+/*** Trade that transfers an item between
+two people***/
+transaction ItemTransfer {
+    --> Item item
+    --> Person newOwner
+}
+
+transaction AdminItemTransfer {
+    --> Person previousOwner
+    --> Item item
+    --> Person newOwner
+}
+
+/* Payment that moves funds from the initiator to the specified recipient */
+transaction OrdinaryPayment {
+	o Double amount
+	--> Person recipient
+}
+
+/*Payment when a refugee is getting funds from a merchant. Funds move from refugee to Merchant*/
+transaction RefugeeMerchantPayment{
+        o Double amount
+        --> Person refugee
+}
+
+/* Payment that moves cash between two people used by the ADMIN only*/
+transaction AdminCrossPayment{
+        o Double amount
+        --> Person sender
+        --> Person recipient
+}
+
+/*** Used to update the location of a shipment */
+transaction LocationUpdate {
+  o String location
+  --> Shipment shipment
+}
+
+
+
+/*************** Events ****************/
+
+/*** Event emitted when shipment reaches destination ***/
+
+event ShipmentArrived {
+  o String message
+  --> Shipment shipment
+}
+
+/*** Event emitted when goods are transferred between people */
+event GoodsTransferred {
+  o String message
+  --> Person sender
+  --> Person recipient
+}
+
+/*** Event emitted when cash is transferred between two people */
+event CashTrasfer{
+  o String message
+  --> Person sender
+  --> Person recipient
+}
